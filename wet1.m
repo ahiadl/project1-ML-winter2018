@@ -59,15 +59,15 @@ title('K-Means Labled Samples on 2 Dimensional Reduced Space')
 
 %% Supervised Binary Classification
 
- tic
- trainedStats = naiveBayesTrain(X_train, y_train);
- toc
- tic
- [y_pred_test, err_test]   = naiveBayesTest(X_test, y_test, trainedStats);
- toc
- tic
- [y_pred_train, err_train] = naiveBayesTest(X_train, y_train, trainedStats);
- toc
+%  tic
+%  trainedStats = naiveBayesTrain(X_train, y_train);
+%  toc
+%  tic
+%  [y_pred_test, err_test]   = naiveBayesTest(X_test, y_test, trainedStats);
+%  toc
+%  tic
+%  [y_pred_train, err_train] = naiveBayesTest(X_train, y_train, trainedStats);
+%  toc
 
  %% Logistic Regression
 % K=10; %num of groups for training

@@ -11,9 +11,9 @@ Sleft = node.leftX;
 Sleft(node.d,:) = [];
 Sright = node.rightX;
 Sright(node.d,:) = [];
-display('entering right buildTree')
+% display('entering left buildTree')
 node.leftNode = buildTree(Sleft, node.leftY, benchmark);
-display('entering left buildTree')
+% display('entering right buildTree')
 node.rightNode = buildTree(Sright, node.rightY, benchmark);
 end
 
@@ -36,10 +36,10 @@ for j = 1:d
        p2  = sum(ym2)/length(SM2);
        Qt(i) = (length(SM1)/N)*calcBench(p1,benchmark) + (length(SM2)/N)*calcBench(p2,benchmark);
     end
-    [qMaxPerFeature(j), idx] = max(Qt);
+    [qMinPerFeature(j), idx] = min(Qt);
     tMaxPerFeature(j) = featureOptionsT(idx);  
 end
-    [~, dimIdx] = max(qMaxPerFeature);
+    [~, dimIdx] = min(qMinPerFeature);
     t = tMaxPerFeature(dimIdx);
     chosenDim = S(dimIdx,:);
     leftIdx = find(chosenDim<t);
@@ -53,6 +53,7 @@ end
 end
 
 function [Q] = calcBench(p,benchmark)
+% designed only for the binary case
 p = [p, 1-p];
     switch benchmark
             case 'classErr'
@@ -65,6 +66,7 @@ p = [p, 1-p];
 end
 
 function [t] = findT(S, yS)
+% finds t that are algebric average between 2 closest x with different tag
 gSize1 = sum(yS);
 gSize0 = length(yS) - gSize1;
 
@@ -79,16 +81,3 @@ for i=1:length(Ssmall)
 end
 
 end
-% 
-% function [t] = findT(S, yS)
-% gSize1 = sum(yS);
-% gSize0 = length(yS) - gSize1;
-% 
-% smallGroupTag = (gSize1<gSize0);
-% %--- find the Ti----%
-% Ssmall = S(yS == smallGroupTag);
-% Sbig   = S(yS ~= smallGroupTag);
-% 
-% t = linspace(min(S)+0.001,max(S)-0.001,100);
-% 
-% end
