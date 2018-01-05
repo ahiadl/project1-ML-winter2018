@@ -8,12 +8,21 @@ d = size(X,1);
 X = X - min(X,[],2);
 X = X./repmat(max(X,[],2), 1, N);
 
-for i = 1: numel(y)
-    y_cell{i} = y(i);
-end
+coeff = pca(X');
+dim1 = coeff(:,1);
+dim2 = coeff(:,2);
 
-% XdataMat = bioma.data.DataMatrix(X');
-% mapcaplot(XdataMat,y_cell);
+X1pca = dim1'*X;
+X2pca = dim2'*X;
+
+figure()
+plot(X1pca(y==1),X2pca(y==1),'r+')
+hold on 
+plot(X1pca(y==0),X2pca(y==0),'b+')
+xlabel('PCA 1st strong dimension')
+ylabel('PCA 2nd strong dimension')
+title('Original Labled Samples on 2 Dimensional Reduced Space')
+
 
 %%
 train_precent = 0.8;
@@ -25,30 +34,28 @@ y_train = y(rand_indx(1:num_train_samples));
 X_test = X(:,rand_indx(num_train_samples+1:end));
 y_test = y(rand_indx(num_train_samples+1:end));
 
+%% K means
+[yK ,Centers, KmeanError] = K_means(X,2);
 
+figure()
+plot(X1pca(yK==1),X2pca(yK==1),'r+')
+hold on 
+plot(X1pca(yK==2),X2pca(yK==2),'b+')
+xlabel('PCA 1st strong dimension')
+ylabel('PCA 2nd strong dimension')
+title('K-Means Labled Samples on 2 Dimensional Reduced Space')
 
-% %% K means
-% [yK ,Centers, KmeanError] = K_means(X,2);
-% for i = 1: numel(y)
-%     yK_cell{i} = yK(i);
-% end
-% 
-% mapcaplot(XdataMat,yK_cell);
-% % coeefs = pca(X');
-% % pca2kmeans_error = sum(sum((Centers - coeefs(:,1:2)).^2));
-% 
-% 
-% %% Supervised Binary Classification
-% 
-%  tic
-%  trainedStats = naiveBayesTrain(X_train, y_train);
-%  toc
-%  tic
-%  [y_pred_test, err_test]   = naiveBayesTest(X_test, y_test, trainedStats);
-%  toc
-%  tic
-%  [y_pred_train, err_train] = naiveBayesTest(X_train, y_train, trainedStats);
-%  toc
+%% Supervised Binary Classification
+
+ tic
+ trainedStats = naiveBayesTrain(X_train, y_train);
+ toc
+ tic
+ [y_pred_test, err_test]   = naiveBayesTest(X_test, y_test, trainedStats);
+ toc
+ tic
+ [y_pred_train, err_train] = naiveBayesTest(X_train, y_train, trainedStats);
+ toc
 
  %% Logistic Regression
 K=10; %num of groups for training
