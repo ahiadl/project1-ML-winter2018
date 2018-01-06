@@ -61,7 +61,11 @@ p = [p, 1-p];
             case 'Gini'
                 Q = sum(p.*(1-p));
             case 'Antropy'
-                Q = sum(-p.*log2(p));
+                if( p(1)==0 | p(1)==1)
+                    Q = 0;
+                else
+                    Q = sum(-p.*log2(p));
+                end
     end
 end
 
